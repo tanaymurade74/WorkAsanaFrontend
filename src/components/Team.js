@@ -11,7 +11,7 @@ const Team = () => {
 
   const [teamsArr, setTeamsArr] = useState([]);
 
-  const { data, error, loading } = useFetch("http://localhost:3001/teams");
+  const { data, error, loading } = useFetch(`${process.env.REACT_APP_API_URL}/teams`);
   console.log("Data", data);
   console.log("Error", error);
   useEffect(() => {
@@ -23,7 +23,7 @@ const Team = () => {
     data: user,
     error: userError,
     loading: userLoading,
-  } = useFetch("http://localhost:3001/users");
+  } = useFetch(`${process.env.REACT_APP_API_URL}/users`);
   const usersArr = user?.Users;
 
   const handleCreateTeam = async () => {
@@ -40,7 +40,7 @@ const Team = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:3001/teams", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/teams`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -71,8 +71,25 @@ const Team = () => {
   return (
     <div className="d-flex flex-column min-vh-100" style={{ backgroundColor: "#ffffff" }}>
       <Header />
-      {loading && <p>Loading...</p>}
+       {loading && (
+                <div
+                  className="d-flex justify-content-center align-items-center"
+                  style={{ minHeight: "400px" }}
+                >
+                  <div className="text-center">
+                    <div
+                      className="spinner-border text-primary"
+                      style={{ width: "3rem", height: "3rem" }}
+                      role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <p className="mt-3 fs-5 text-muted">Fetching...</p>
+                  </div>
+                </div>
+              )}  
       {!loading && error && <p>Error while fetching teams</p>}
+      {!loading &&
       <div className="mt-5 container">
         <div className="row g-4">
           <div className="d-flex justify-content-between align-items-center mb-3">
@@ -218,6 +235,7 @@ const Team = () => {
             ))}
         </div>
       </div>
+}
       
     </div>
   );

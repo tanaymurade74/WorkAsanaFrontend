@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import useFetch from "../useFetch";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Layout from "./Layout";
 import Header from "./Header";
 
 const ProjectDetail = () => {
@@ -20,7 +19,7 @@ const ProjectDetail = () => {
   const projectId = param.projectId;
 
   const { data, error, loading } = useFetch(
-    `http://localhost:3001/projects/${projectId}`
+    `${process.env.REACT_APP_API_URL}/projects/${projectId}`
   );
   const proj = data?.Project;
 
@@ -28,19 +27,19 @@ const ProjectDetail = () => {
     data: tasks,
     error: tasksError,
     loading: tasksLoading,
-  } = useFetch(`http://localhost:3001/tasks/project/${projectId}`);
+  } = useFetch(`${process.env.REACT_APP_API_URL}/tasks/project/${projectId}`);
 
   useEffect(() => {
     setTasksArr(tasks?.Tasks || []);
   }, [tasks]);
 
   const { data: users, error: usersError, loading: usersLoading } = useFetch(
-    `http://localhost:3001/users`
+    `${process.env.REACT_APP_API_URL}/users`
   );
   const usersArr = users?.Users;
 
   const { data: team, error: teamError, loading: teamLoading } = useFetch(
-    "http://localhost:3001/teams"
+    `${process.env.REACT_APP_API_URL}/teams`
   );
   const teamsArr = team?.Teams || [];
 
@@ -74,7 +73,7 @@ const ProjectDetail = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:3001/tasks", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/tasks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -138,7 +137,23 @@ const ProjectDetail = () => {
     <div className="min-vh-100 bg-light d-flex flex-column">
       <Header />
       <div className="flex-grow-1 p-5 overflow-auto">
-        {(loading || tasksLoading) && <p className="text-muted">Loading...</p>}
+         {(loading || tasksLoading) && (
+                <div
+                  className="d-flex justify-content-center align-items-center"
+                  style={{ minHeight: "400px" }}
+                >
+                  <div className="text-center">
+                    <div
+                      className="spinner-border text-primary"
+                      style={{ width: "3rem", height: "3rem" }}
+                      role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <p className="mt-3 fs-5 text-muted">Fetching...</p>
+                  </div>
+                </div>
+              )}  
         {(!loading || !tasksLoading) && error && (
           <p className="text-danger">Error while fetching</p>
         )}

@@ -23,7 +23,7 @@ const HomePage = () => {
   const [localSearch, setLocalSearch] = useState("");
   const [search, setSearch] = useState("");
 
-  const { data, error, loading } = useFetch("http://localhost:3001/projects");
+  const { data, error, loading } = useFetch(`${process.env.REACT_APP_API_URL}/projects`);
 
   const userString = localStorage.getItem("user");
   const user = userString ? JSON.parse(userString) : null;
@@ -33,7 +33,7 @@ const HomePage = () => {
     data: userTask,
     error: userTaskError,
     loading: userTaskLoading,
-  } = useFetch(`http://localhost:3001/tasks/${userId}`);
+  } = useFetch(`${process.env.REACT_APP_API_URL}/tasks/${userId}`);
 
   useEffect(() => {
     setProjectsArray(data?.Projects || []);
@@ -47,10 +47,10 @@ const HomePage = () => {
     return () => clearTimeout(debounceSearch);
   }, [localSearch]);
 
-  const { data: users } = useFetch(`http://localhost:3001/users`);
+  const { data: users } = useFetch(`${process.env.REACT_APP_API_URL}/users`);
   const usersArr = users?.Users;
 
-  const { data: team } = useFetch(`http://localhost:3001/teams`);
+  const { data: team } = useFetch(`${process.env.REACT_APP_API_URL}/teams`);
   const teamsArr = team?.Teams || [];
 
   const getUserById = (id) => {
@@ -73,7 +73,7 @@ const HomePage = () => {
     };
 
     try {
-      const response = await fetch(`http://localhost:3001/projects`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -116,7 +116,7 @@ const HomePage = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:3001/tasks", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/tasks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -267,7 +267,23 @@ const HomePage = () => {
             )}
           </div>
 
-          {loading && <p className="text-muted">Loading projects...</p>}
+          {loading && (
+                <div
+                  className="d-flex justify-content-center align-items-center"
+                  style={{ minHeight: "400px" }}
+                >
+                  <div className="text-center">
+                    <div
+                      className="spinner-border text-primary"
+                      style={{ width: "3rem", height: "3rem" }}
+                      role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <p className="mt-3 fs-5 text-muted">Fetching...</p>
+                  </div>
+                </div>
+              )}  
           {!loading && error && <p className="text-danger">Error loading projects.</p>}
           
           {!loading && filteredProjects.length === 0 && (
@@ -489,7 +505,23 @@ const HomePage = () => {
             )}
           </div>
 
-          {userTaskLoading && <p className="text-muted">Loading tasks...</p>}
+           {loading && (
+                <div
+                  className="d-flex justify-content-center align-items-center"
+                  style={{ minHeight: "400px" }}
+                >
+                  <div className="text-center">
+                    <div
+                      className="spinner-border text-primary"
+                      style={{ width: "3rem", height: "3rem" }}
+                      role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <p className="mt-3 fs-5 text-muted">Fetching...</p>
+                  </div>
+                </div>
+              )}  
           {userTaskError && <p className="text-danger">Error loading tasks.</p>}
           {!userTaskLoading && tasksArray.length === 0 && (
             <p className="text-muted">No tasks assigned to you yet.</p>

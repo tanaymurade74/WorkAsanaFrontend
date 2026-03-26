@@ -8,7 +8,7 @@ const TaskDetail = () => {
   const { taskId } = useParams();
 
   const { data, error, loading } = useFetch(
-    `http://localhost:3001/tasks/taskDetail/${taskId}`
+    `${process.env.REACT_APP_API_URL}/tasks/taskDetail/${taskId}`
   );
   console.log(data);
   useEffect(() => {
@@ -19,7 +19,7 @@ const TaskDetail = () => {
     data: user,
     error: userError,
     loading: userLoading,
-  } = useFetch(`http://localhost:3001/users`);
+  } = useFetch(`${process.env.REACT_APP_API_URL}/users`);
   //   console.log("user",user?.Users);
 
   const usersArr = user?.Users || [];
@@ -29,14 +29,14 @@ const TaskDetail = () => {
     data: project,
     error: projectError,
     loading: projectLoading,
-  } = useFetch("http://localhost:3001/projects");
+  } = useFetch(`${process.env.REACT_APP_API_URL}/projects`);
   const projArr = project?.Projects || [];
 
   const {
     data: team,
     error: teamError,
     loading: teamLoading,
-  } = useFetch("http://localhost:3001/teams");
+  } = useFetch(`${process.env.REACT_APP_API_URL}/teams`);
   const teamArr = team?.Teams || [];
 
   const getUserById = (id) => {
@@ -86,7 +86,7 @@ const TaskDetail = () => {
     console.log("Payload", payload)
 
     try{
-        const response = await fetch(`http://localhost:3001/tasks/${task._id}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/tasks/${task._id}`, {
             method: "PATCH",
             headers : {
                 "Content-Type": "application/json",
@@ -121,7 +121,23 @@ const TaskDetail = () => {
     
 
       <div className="mt-5 container">
-        {loading && <p>Loading..</p>}
+         {loading && (
+                <div
+                  className="d-flex justify-content-center align-items-center"
+                  style={{ minHeight: "400px" }}
+                >
+                  <div className="text-center">
+                    <div
+                      className="spinner-border text-primary"
+                      style={{ width: "3rem", height: "3rem" }}
+                      role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <p className="mt-3 fs-5 text-muted">Fetching...</p>
+                  </div>
+                </div>
+              )}  
         {!loading && error && <p>Error...</p>}
 
         {!loading && task && (

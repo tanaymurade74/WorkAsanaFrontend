@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import useFetch from "../useFetch";
-import Layout from "./Layout";
 import Header from "./Header";
 
 const Settings = () => {
@@ -9,9 +8,9 @@ const Settings = () => {
   const [allTasks, setAllTasks] = useState([]);
   const [activeView, setActiveView] = useState("projects");
 
-  const { data: projectsData } = useFetch("http://localhost:3001/projects");
-  const { data: teamsData } = useFetch("http://localhost:3001/teams");
-  const { data: tasksData } = useFetch("http://localhost:3001/tasks");
+  const { data: projectsData } = useFetch(`${process.env.REACT_APP_API_URL}/projects`);
+  const { data: teamsData } = useFetch(`${process.env.REACT_APP_API_URL}/teams`);
+  const { data: tasksData } = useFetch(`${process.env.REACT_APP_API_URL}/tasks`);
 
   useEffect(() => {
     if (projectsData?.Projects) {
@@ -32,7 +31,7 @@ const Settings = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:3001/projects/${projectId}`,
+        `${process.env.REACT_APP_API_URL}/projects/${projectId}`,
         {
           method: "DELETE",
           headers: {
@@ -54,7 +53,7 @@ const Settings = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:3001/teams/${teamId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/teams/${teamId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -74,7 +73,7 @@ const Settings = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:3001/tasks/${taskId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/tasks/${taskId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

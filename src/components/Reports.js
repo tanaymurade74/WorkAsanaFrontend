@@ -13,7 +13,6 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import Layout from "./Layout";
 import Header from "./Header";
 
 ChartJS.register(
@@ -29,10 +28,10 @@ ChartJS.register(
 );
 
 const Reports = () => {
-  const { data: lastWeekRaw, loading: loading1, error: err1 } = useFetch("http://localhost:3001/report/lastWeek");
-  const { data: pendingRaw, loading: loading2, error: err2 } = useFetch("http://localhost:3001/report/pending");
-  const { data: closedRaw, loading: loading3, error: err3 } = useFetch("http://localhost:3001/report/closedTasks");
-  const { data: projectsRaw, loading: loading4, error: err4 } = useFetch("http://localhost:3001/projects");
+  const { data: lastWeekRaw, loading: loading1, error: err1 } = useFetch(`${process.env.REACT_APP_API_URL}/report/lastWeek`);
+  const { data: pendingRaw, loading: loading2, error: err2 } = useFetch(`${process.env.REACT_APP_API_URL}/report/pending`);
+  const { data: closedRaw, loading: loading3, error: err3 } = useFetch(`${process.env.REACT_APP_API_URL}/report/closedTasks`);
+  const { data: projectsRaw, loading: loading4, error: err4 } = useFetch(`${process.env.REACT_APP_API_URL}/projects`);
 
   const isLoading = loading1 || loading2 || loading3 || loading4;
   const hasError = err1 || err2 || err3 || err4;
@@ -130,7 +129,23 @@ const Reports = () => {
           <h2 className="fw-bold mb-0">Report Overview</h2>
         </div>
 
-        {isLoading && <p className="text-muted fs-5">Crunching the latest data...</p>}
+         {isLoading && (
+                <div
+                  className="d-flex justify-content-center align-items-center"
+                  style={{ minHeight: "400px" }}
+                >
+                  <div className="text-center">
+                    <div
+                      className="spinner-border text-primary"
+                      style={{ width: "3rem", height: "3rem" }}
+                      role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <p className="mt-3 fs-5 text-muted">Fetching...</p>
+                  </div>
+                </div>
+              )}  
         {hasError && <p className="text-danger fw-bold">Error loading reports: {hasError}</p>}
 
         {!isLoading && !hasError && workDone && pending && team && owner && (
