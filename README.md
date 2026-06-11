@@ -1,70 +1,94 @@
-# Getting Started with Create React App
+# WorkAsana – Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A team task and project management dashboard. Sign up or log in, create projects and teams, assign and track tasks through their workflow, and view reports with charts. Built with React, React Router, Bootstrap, and Chart.js, backed by a REST API with JWT authentication.
 
-## Available Scripts
+## Live Demo
 
-In the project directory, you can run:
+[Live Demo](https://work-asana-frontend-six.vercel.app/)
 
-### `npm start`
+## Quick Start
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+git clone https://github.com/tanaymurade74/WorkAsanaFrontend.git
+cd WorkAsanaFrontend
+npm install
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Create a `.env` file in the project root, pointing at the backend:
 
-### `npm test`
+```env
+REACT_APP_API_URL=http://localhost:3001
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+> Replace with your deployed [backend](https://github.com/tanaymurade74/WorkAsanaBackend) URL in production.
 
-### `npm run build`
+Then start the app:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Technologies
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* React JS
+* React Router
+* Bootstrap
+* Chart.js (react-chartjs-2)
+* Create React App
 
-### `npm run eject`
+## Features
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+**Authentication**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+* User signup and login with JWT
+* Token stored in the browser and sent with every request
+* Protected pages for projects, teams, tasks, and reports
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+**Home / Dashboard**
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+* Overview of your projects and the tasks assigned to you
+* Create a new project or task directly from the dashboard
 
-## Learn More
+**Projects**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+* View a project's details and all tasks within it
+* Add new tasks to a project
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**Teams**
 
-### Code Splitting
+* List all teams and create new ones
+* View a team's details and its members
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+**Tasks**
 
-### Analyzing the Bundle Size
+* View task details and update status (To Do, In Progress, Completed, Blocked)
+* Tasks carry owners, tags, and an estimated time to complete
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+**Reports**
 
-### Making a Progressive Web App
+* Charts for tasks completed last week, pending work, and tasks closed by team, project, and owner
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+**Settings**
 
-### Advanced Configuration
+* Manage and delete existing projects, teams, and tasks
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## API Reference
 
-### Deployment
+This app consumes the WorkAsana backend REST API. The base URL is read from `REACT_APP_API_URL`, and a JWT token is sent in the `Authorization` header on every request.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### POST /auth/signup
+Register a new user. Sample Response: `{ message, User: { id, name, email } }`
 
-### `npm run build` fails to minify
+### POST /auth/login
+Log in and receive a token. Sample Response: `{ message, token, User }`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### GET /projects · GET /teams · GET /tasks
+Fetch projects, teams, and tasks for the dashboard and detail views.
+
+### POST /projects · POST /teams · POST /tasks
+Create a project, team, or task.
+
+### GET /report/lastWeek · GET /report/pending · GET /report/closedTasks
+Data behind the reports charts.
+
+> Full endpoint list: see the [backend repository](https://github.com/tanaymurade74/WorkAsanaBackend).
